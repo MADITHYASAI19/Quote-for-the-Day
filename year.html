@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Quote for the Day</title>
+  <style>
+    /* General Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #121212; /* Dark background for the body */
+      color: #eee; /* Light text color */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* Container Styles */
+    .container {
+      background: #fff; /* White background for the container */
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      max-width: 500px;
+      text-align: center;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    /* Quote and Author Styling */
+    .quote {
+      font-size: 1.4rem;
+      margin-bottom: 20px;
+      color: #333; /* Dark color for the quote */
+      transition: color 0.3s ease;
+    }
+
+    .author {
+      font-size: 1.1rem;
+      color: #555; /* Lighter color for the author */
+      margin-bottom: 30px;
+      transition: color 0.3s ease;
+    }
+
+    /* Button Styling */
+    button {
+      padding: 10px 20px;
+      font-size: 1rem;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+      transform: scale(1.05);
+    }
+
+    /* Date Styling */
+    .date {
+      font-size: 0.95rem;
+      color: #777; /* Lighter color for the date */
+      margin-bottom: 30px;
+      transition: color 0.3s ease;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="quote" id="quote">Click the button to get a quote!</div>
+    <div class="author" id="author">-</div>
+    <div class="date" id="date">Date: -</div>
+    <button onclick="generateQuote()">New Quote</button>
+  </div>
+
+  <script>
+    const yearlyQuotes = [
+      { date: "Jan-1", quote: "Arise! Awake! and stop not until the goal is reached.", author: "Swami Vivekananda" },
+      { date: "Jan-2", quote: "Take risks in your life. If you win, you can lead. If you lose, you can guide.", author: "Swami Vivekananda" },
+      { date: "Jan-3", quote: "You have to grow from the inside out. None can teach you, none can make you spiritual.", author: "Swami Vivekananda" },
+      { date: "Jan-4", quote: "In a day, when you don’t come across any problems – you can be sure that you are travelling in a wrong path.", author: "Swami Vivekananda" },
+      { date: "Jan-5", quote: "Talk to yourself once in a day, otherwise you may miss meeting an intelligent person in this world.", author: "Swami Vivekananda" },
+      { date: "Jan-6", quote: "The greatest sin is to think yourself weak.", author: "Swami Vivekananda" },
+      { date: "Jan-7", quote: "The world is the great gymnasium where we come to make ourselves strong.", author: "Swami Vivekananda" },
+      { date: "Jan-8", quote: "Act as if what you do makes a difference. It does.", author: "William James" },
+  { date: "Jan-9", quote: "What you do today can improve all your tomorrows.", author: "Ralph Marston" },
+  { date: "Jan-10", quote: "The only limit to our realization of tomorrow is our doubts of today.", author: "Franklin D. Roosevelt" },
+  { date: "Jan-11", quote: "You are never too old to set another goal or to dream a new dream.", author: "C.S. Lewis" },
+  { date: "Jan-12", quote: "The future belongs to those who believe in the beauty of their dreams.", author: "Eleanor Roosevelt" },
+  { date: "Jan-13", quote: "It always seems impossible until it's done.", author: "Nelson Mandela" },
+  { date: "Jan-14", quote: "Don't watch the clock; do what it does. Keep going.", author: "Sam Levenson" },
+  { date: "Jan-15", quote: "You don't always get what you wish for, you get what you work for.", author: "Unknown" },
+  { date: "Jan-16", quote: "The only way to do great work is to love what you do.", author: "Steve Jobs" },
+  { date: "Jan-17", quote: "Believe you can and you're halfway there.", author: "Theodore Roosevelt" },
+  { date: "Jan-18", quote: "Our greatest glory is not in never falling, but in rising every time we fall.", author: "Confucius" },
+  { date: "Jan-19", quote: "Success is not final, failure is not fatal: It is the courage to continue that counts.", author: "Winston Churchill" },
+  { date: "Jan-20", quote: "Hardships often prepare ordinary people for an extraordinary destiny.", author: "C.S. Lewis" },
+  { date: "Jan-21", quote: "I find that the harder I work, the more luck I seem to have.", author: "Thomas Jefferson" },
+  { date: "Jan-22", quote: "The man who moves a mountain begins by carrying away small stones.", author: "Confucius" },
+  { date: "Jan-23", quote: "If you're going through hell, keep going.", author: "Winston Churchill" },
+  { date: "Jan-24", quote: "Opportunities don't happen. You create them.", author: "Chris Grosser" },
+  { date: "Jan-25", quote: "Don't let yesterday take up too much of today.", author: "Will Rogers" },
+  { date: "Jan-26", quote: "The expert in anything was once a beginner.", author: "Helen Hayes" },
+  { date: "Jan-27", quote: "The way to get started is to quit talking and begin doing.", author: "Walt Disney" },
+  { date: "Jan-28", quote: "It's not whether you get knocked down, it's whether you get up.", author: "Vince Lombardi" },
+  { date: "Jan-29", quote: "If you want to lift yourself up, lift up someone else.", author: "Booker T. Washington" },
+  { date: "Jan-30", quote: "The only place where success comes before work is in the dictionary.", author: "Vidal Sassoon" },
+  { date: "Jan-31", quote: "There are no shortcuts to any place worth going.", author: "Beverly Sills" },
+
+  // February (1-28)
+  { date: "Feb-1", quote: "Darkness cannot drive out darkness; only light can do that.", author: "Martin Luther King Jr." },
+  { date: "Feb-2", quote: "We must let go of the life we have planned, so as to accept the one that is waiting for us.", author: "Joseph Campbell" },
+  { date: "Feb-3", quote: "Your time is limited, don't waste it living someone else's life.", author: "Steve Jobs" },
+  { date: "Feb-4", quote: "Life is what happens when you're busy making other plans.", author: "John Lennon" },
+  { date: "Feb-5", quote: "The purpose of our lives is to be happy.", author: "Dalai Lama" },
+  { date: "Feb-6", quote: "Get busy living or get busy dying.", author: "Stephen King" },
+  { date: "Feb-7", quote: "You only live once, but if you do it right, once is enough.", author: "Mae West" },
+  { date: "Feb-8", quote: "Many of life's failures are people who did not realize how close they were to success when they gave up.", author: "Thomas Edison" },
+  { date: "Feb-9", quote: "If life were predictable it would cease to be life, and be without flavor.", author: "Eleanor Roosevelt" },
+  { date: "Feb-10", quote: "The whole secret of a successful life is to find out what is one's destiny to do, and then do it.", author: "Henry Ford" },
+  { date: "Feb-11", quote: "In order to write about life first you must live it.", author: "Ernest Hemingway" },
+  { date: "Feb-12", quote: "Life is not a problem to be solved, but a reality to be experienced.", author: "Soren Kierkegaard" },
+  { date: "Feb-13", quote: "The unexamined life is not worth living.", author: "Socrates" },
+  { date: "Feb-14", quote: "Turn your wounds into wisdom.", author: "Oprah Winfrey" },
+  { date: "Feb-15", quote: "The purpose of life is not to be happy. It is to be useful, to be honorable, to be compassionate.", author: "Ralph Waldo Emerson" },
+  { date: "Feb-16", quote: "Life is either a daring adventure or nothing at all.", author: "Helen Keller" },
+  { date: "Feb-17", quote: "Life shrinks or expands in proportion to one's courage.", author: "Anais Nin" },
+  { date: "Feb-18", quote: "You have within you right now, everything you need to deal with whatever the world can throw at you.", author: "Brian Tracy" },
+  { date: "Feb-19", quote: "Believe that life is worth living and your belief will help create the fact.", author: "William James" },
+  { date: "Feb-20", quote: "We do not remember days, we remember moments.", author: "Cesare Pavese" },
+  { date: "Feb-21", quote: "Life is really simple, but we insist on making it complicated.", author: "Confucius" },
+  { date: "Feb-22", quote: "Life is 10% what happens to me and 90% how I react to it.", author: "Charles Swindoll" },
+  { date: "Feb-23", quote: "Keep calm and carry on.", author: "Winston Churchill" },
+  { date: "Feb-24", quote: "The good life is one inspired by love and guided by knowledge.", author: "Bertrand Russell" },
+  { date: "Feb-25", quote: "Life is a succession of lessons which must be lived to be understood.", author: "Ralph Waldo Emerson" },
+  { date: "Feb-26", quote: "My life is my message.", author: "Mahatma Gandhi" },
+  { date: "Feb-27", quote: "Life is short, and it's up to you to make it sweet.", author: "Sarah Louise Delany" },
+  { date: "Feb-28", quote: "The biggest adventure you can take is to live the life of your dreams.", author: "Oprah Winfrey" },
+
+  // March (1-31)
+  { date: "Mar-1", quote: "March comes in like a lion and goes out like a lamb.", author: "English Proverb" },
+  { date: "Mar-2", quote: "Spring is nature's way of saying, 'Let's party!'", author: "Robin Williams" },
+  { date: "Mar-3", quote: "No matter how long the winter, spring is sure to follow.", author: "Proverb" },
+  { date: "Mar-4", quote: "The earth laughs in flowers.", author: "Ralph Waldo Emerson" },
+  { date: "Mar-5", quote: "Spring is the time of plans and projects.", author: "Leo Tolstoy" },
+  { date: "Mar-6", quote: "In the spring, at the end of the day, you should smell like dirt.", author: "Margaret Atwood" },
+  { date: "Mar-7", quote: "Spring is when you feel like whistling even with a shoe full of slush.", author: "Doug Larson" },
+  { date: "Mar-8", quote: "The promise of spring's arrival is enough to get anyone through the bitter winter.", author: "Jen Selinsky" },
+  { date: "Mar-9", quote: "Spring is the time of year when it is summer in the sun and winter in the shade.", author: "Charles Dickens" },
+  { date: "Mar-10", quote: "Blossom by blossom the spring begins.", author: "Algernon Charles Swinburne" },
+  { date: "Mar-11", quote: "Spring will come and so will happiness. Hold on. Life will get warmer.", author: "Anita Krizzan" },
+  { date: "Mar-12", quote: "Science has never drummed up quite as effective a tranquilizing agent as a sunny spring day.", author: "W. Earl Hall" },
+  { date: "Mar-13", quote: "Spring shows what God can do with a drab and dirty world.", author: "Virgil A. Kraft" },
+  { date: "Mar-14", quote: "The beautiful spring came; and when Nature resumes her loveliness, the human soul is apt to revive also.", author: "Harriet Ann Jacobs" },
+  { date: "Mar-15", quote: "Beware the Ides of March.", author: "William Shakespeare" },
+  { date: "Mar-16", quote: "March is a month of considerable frustration - it is so near spring and yet across a great deal of the country the weather is still so violent and changeable.", author: "Hal Borland" },
+  { date: "Mar-17", quote: "May your troubles be less and your blessings be more, and nothing but happiness come through your door.", author: "Irish Blessing" },
+  { date: "Mar-18", quote: "March is the month God created to show people who don't drink what a hangover is like.", author: "Garrison Keillor" },
+  { date: "Mar-19", quote: "March brings breezes loud and shrill, stirs the dancing daffodil.", author: "Sara Coleridge" },
+  { date: "Mar-20", quote: "Spring has returned. The Earth is like a child that knows poems.", author: "Rainer Maria Rilke" },
+  { date: "Mar-21", quote: "The first day of spring is one thing, and the first spring day is another.", author: "Henry Van Dyke" },
+  { date: "Mar-22", quote: "Spring is the time for plans and projects.", author: "Leo Tolstoy" },
+  { date: "Mar-23", quote: "Spring won't let me stay in this house any longer! I must get out and breathe the air deeply again.", author: "Gustav Mahler" },
+  { date: "Mar-24", quote: "April hath put a spirit of youth in everything.", author: "William Shakespeare" },
+  { date: "Mar-25", quote: "The sun just touched the morning; the morning, happy thing, supposed that he had come to dwell, and life would be all spring.", author: "Emily Dickinson" },
+  { date: "Mar-26", quote: "Spring is when life's alive in everything.", author: "Christina Rossetti" },
+  { date: "Mar-27", quote: "Spring is far more than just a changing of seasons; it's a rebirth of the spirit.", author: "Toni Sorenson" },
+  { date: "Mar-28", quote: "If we had no winter, the spring would not be so pleasant.", author: "Anne Bradstreet" },
+  { date: "Mar-29", quote: "Spring is the fountain of love for thirsty winter.", author: "Munia Khan" },
+  { date: "Mar-30", quote: "Spring adds new life and new beauty to all that is.", author: "Jessica Harrelson" },
+  { date: "Mar-31", quote: "The day the Lord created hope was probably the same day He created spring.", author: "Bern Williams" },
+
+  // April (1-30)
+  { date: "Apr-1", quote: "April 1. This is the day upon which we are reminded of what we are on the other three hundred and sixty-four.", author: "Mark Twain" },
+  { date: "Apr-2", quote: "April hath put a spirit of youth in everything.", author: "William Shakespeare" },
+  { date: "Apr-3", quote: "April prepares her green traffic light and the world thinks Go.", author: "Christopher Morley" },
+  { date: "Apr-4", quote: "April is the cruelest month, breeding lilacs out of the dead land.", author: "T.S. Eliot" },
+  { date: "Apr-5", quote: "The April rains, the April flowers, bring on the showers, bring on the flowers.", author: "Lyrics from 'April Showers'" },
+  { date: "Apr-6", quote: "Sweet April showers do spring May flowers.", author: "Thomas Tusser" },
+  { date: "Apr-7", quote: "April is a promise that May is bound to keep.", author: "Hal Borland" },
+  { date: "Apr-8", quote: "The sun was warm but the wind was chill. You know how it is with an April day.", author: "Robert Frost" },
+  { date: "Apr-9", quote: "April's air stirs in the willow's hair.", author: "E.E. Cummings" },
+  { date: "Apr-10", quote: "April is the kindest month. April gets you out of your head and out working in the garden.", author: "Marty Rubin" },
+  { date: "Apr-11", quote: "April, the angel of the months, the young love of the year.", author: "Vita Sackville-West" },
+  { date: "Apr-12", quote: "April is a month of expectation, the month of promise, the month of hope.", author: "Gladys Hasty Carroll" },
+  { date: "Apr-13", quote: "The April winds are magical, and thrill our tuneful frames.", author: "Ralph Waldo Emerson" },
+  { date: "Apr-14", quote: "April, the month of dust and lies.", author: "Gregory Orr" },
+  { date: "Apr-15", quote: "April is the month of the returned bird, the open flower, the unfolded leaf.", author: "John Burroughs" },
+  { date: "Apr-16", quote: "April's rare capricious loveliness is like a woman's, and hath a way with her.", author: "Theodosia Garrison" },
+  { date: "Apr-17", quote: "April weather, rain and sunshine both together.", author: "English Proverb" },
+  { date: "Apr-18", quote: "April's a tomboy, full of grace and laughter.", author: "Charles Hanson Towne" },
+  { date: "Apr-19", quote: "April is the month of the emerging green, when the earth renews its northern garb.", author: "Edwin Way Teale" },
+  { date: "Apr-20", quote: "April's a strange time of year when you can feel both winter's chill and summer's heat.", author: "Terri Guillemets" },
+  { date: "Apr-21", quote: "April's a time of change, when nature shakes off winter's slumber.", author: "Byron Pulsifer" },
+  { date: "Apr-22", quote: "Earth Day should encourage us to reflect on what we are doing to make our planet a more sustainable and livable place.", author: "Scott Peters" },
+  { date: "Apr-23", quote: "April's a time when the world seems new again, full of promise and potential.", author: "Unknown" },
+  { date: "Apr-24", quote: "April's caprices are the stuff of legend, one moment sunshine, the next snow.", author: "Unknown" },
+  { date: "Apr-25", quote: "April's days lengthen, bringing more light to our lives.", author: "Unknown" },
+  { date: "Apr-26", quote: "April's rains bring relief to the parched earth, preparing it for May's flowers.", author: "Unknown" },
+  { date: "Apr-27", quote: "April's winds carry the scent of renewal across the land.", author: "Unknown" },
+  { date: "Apr-28", quote: "April's end approaches, leaving behind memories of showers and flowers.", author: "Unknown" },
+  { date: "Apr-29", quote: "April's final days are bittersweet, as spring fully takes hold.", author: "Unknown" },
+  { date: "Apr-30", quote: "April departs, leaving May to carry forward the promise of spring.", author: "Unknown" },
+
+  // May (1-31)
+  { date: "May-1", quote: "May Day is a time of dancing, singing, and celebrating the return of spring.", author: "Unknown" },
+  { date: "May-2", quote: "May's gentle warmth coaxes the last of spring's flowers into bloom.", author: "Unknown" },
+  { date: "May-3", quote: "May's lengthening days invite us to spend more time outdoors.", author: "Unknown" },
+  { date: "May-4", quote: "May the Fourth be with you!", author: "Star Wars fans" },
+  { date: "May-5", quote: "Cinco de Mayo celebrates the courage of the Mexican people.", author: "Unknown" },
+  { date: "May-6", quote: "May's breezes carry the scent of lilacs and apple blossoms.", author: "Unknown" },
+  { date: "May-7", quote: "May's mornings are bright with birdsong and new leaves.", author: "Unknown" },
+  { date: "May-8", quote: "May's sun warms the earth, preparing it for summer's bounty.", author: "Unknown" },
+  { date: "May-9", quote: "May's rains bring May flowers, as the saying goes.", author: "Unknown" },
+  { date: "May-10", quote: "May's full moon is called the Flower Moon for good reason.", author: "Unknown" },
+  { date: "May-11", quote: "May's middle days are often the most perfect of spring.", author: "Unknown" },
+  { date: "May-12", quote: "May's warmth encourages us to shed our winter layers.", author: "Unknown" },
+  { date: "May-13", quote: "May's gardens burst with color as perennials return.", author: "Unknown" },
+  { date: "May-14", quote: "May's gentle rains keep the world green and growing.", author: "Unknown" },
+  { date: "May-15", quote: "May's promise is fulfilled in its flowers and foliage.", author: "Unknown" },
+  { date: "May-16", quote: "May's lengthening evenings invite leisurely strolls.", author: "Unknown" },
+  { date: "May-17", quote: "May's midpoint is spring at its most vibrant.", author: "Unknown" },
+  { date: "May-18", quote: "May's birds are busy nesting and raising their young.", author: "Unknown" },
+  { date: "May-19", quote: "May's warmth is a prelude to summer's heat.", author: "Unknown" },
+  { date: "May-20", quote: "May's final third sees nature in full bloom.", author: "Unknown" },
+  { date: "May-21", quote: "May's strawberries are the first sweet fruits of the year.", author: "Unknown" },
+  { date: "May-22", quote: "May's lilacs perfume the air with their heady scent.", author: "Unknown" },
+  { date: "May-23", quote: "May's peonies burst forth in a riot of color.", author: "Unknown" },
+  { date: "May-24", quote: "May's Memorial Day reminds us to honor those who served.", author: "Unknown" },
+  { date: "May-25", quote: "May's final week is spring's last hurrah before summer.", author: "Unknown" },
+  { date: "May-26", quote: "May's roses begin their long season of bloom.", author: "Unknown" },
+  { date: "May-27", quote: "May's warmth coaxes the first fireflies from hiding.", author: "Unknown" },
+  { date: "May-28", quote: "May's end approaches, bringing summer ever nearer.", author: "Unknown" },
+  { date: "May-29", quote: "May's oak leaves are finally as large as a squirrel's ear.", author: "Old saying" },
+  { date: "May-30", quote: "May's final days are often the most beautiful of spring.", author: "Unknown" },
+  { date: "May-31", quote: "May departs in a blaze of flowers and greenery.", author: "Unknown" },
+
+  // June (1-30)
+  { date: "Jun-1", quote: "June is the gateway to summer.", author: "Jean Hersey" },
+  { date: "Jun-2", quote: "June is the time for being in the world in new ways.", author: "Joan D. Chittister" },
+  { date: "Jun-3", quote: "In June, as many as a dozen species may burst their buds on a single day.", author: "Aldo Leopold" },
+  { date: "Jun-4", quote: "It is the month of June, the month of leaves and roses.", author: "Christina Rossetti" },
+  { date: "Jun-5", quote: "June is the time to celebrate World Environment Day.", author: "Unknown" },
+  { date: "Jun-6", quote: "June's long days give us more time to enjoy the outdoors.", author: "Unknown" },
+  { date: "Jun-7", quote: "June is when summer officially begins in the northern hemisphere.", author: "Unknown" },
+  { date: "Jun-8", quote: "June's warmth is a welcome change after spring's unpredictability.", author: "Unknown" },
+  { date: "Jun-9", quote: "June's roses are summer's first masterpiece.", author: "Unknown" },
+  { date: "Jun-10", quote: "June's strawberries are nature's candy.", author: "Unknown" },
+  { date: "Jun-11", quote: "June's full moon is called the Strawberry Moon.", author: "Unknown" },
+  { date: "Jun-12", quote: "June's middle is when summer truly feels present.", author: "Unknown" },
+  { date: "Jun-13", quote: "June's heat begins to build as the days reach their longest.", author: "Unknown" },
+  { date: "Jun-14", quote: "June's Flag Day celebrates the Stars and Stripes.", author: "Unknown" },
+  { date: "Jun-15", quote: "June's gardens are at their most lush and colorful.", author: "Unknown" },
+  { date: "Jun-16", quote: "June's Father's Day honors paternal bonds.", author: "Unknown" },
+  { date: "Jun-17", quote: "June's graduations mark transitions and new beginnings.", author: "Unknown" },
+  { date: "Jun-18", quote: "June's warmth makes swimming a daily pleasure.", author: "Unknown" },
+  { date: "Jun-19", quote: "June's Juneteenth celebrates emancipation in the U.S.", author: "Unknown" },
+  { date: "Jun-20", quote: "June's solstice brings the longest day of the year.", author: "Unknown" },
+  { date: "Jun-21", quote: "June's midsummer is celebrated around the world.", author: "Unknown" },
+  { date: "Jun-22", quote: "June's late days are summer in full swing.", author: "Unknown" },
+  { date: "Jun-23", quote: "June's warm nights are perfect for stargazing.", author: "Unknown" },
+  { date: "Jun-24", quote: "June's St. John's Eve is celebrated with bonfires.", author: "Unknown" },
+  { date: "Jun-25", quote: "June's berries begin ripening in earnest.", author: "Unknown" },
+  { date: "Jun-26", quote: "June's heat encourages lazy afternoons in the shade.", author: "Unknown" },
+  { date: "Jun-27", quote: "June's fireflies begin their evening light shows.", author: "Unknown" },
+  { date: "Jun-28", quote: "June's final days are summer at its most carefree.", author: "Unknown" },
+  { date: "Jun-29", quote: "June's end approaches, but summer is just beginning.", author: "Unknown" },
+  { date: "Jun-30", quote: "June departs in a blaze of summer glory.", author: "Unknown" },
+
+  // July (1-31)
+  { date: "Jul-1", quote: "July is the month when summer's heat truly arrives.", author: "Unknown" },
+  { date: "Jul-2", quote: "July's fireworks begin with Independence Day celebrations.", author: "Unknown" },
+  { date: "Jul-3", quote: "July's long days are perfect for beach trips.", author: "Unknown" },
+  { date: "Jul-4", quote: "July Fourth is America's birthday.", author: "Unknown" },
+  { date: "Jul-5", quote: "July's heat makes swimming a daily necessity.", author: "Unknown" },
+  { date: "Jul-6", quote: "July's gardens are at their peak of productivity.", author: "Unknown" },
+  { date: "Jul-7", quote: "July's full moon is called the Buck Moon.", author: "Unknown" },
+  { date: "Jul-8", quote: "July's middle is when summer feels endless.", author: "Unknown" },
+  { date: "Jul-9", quote: "July's heat waves remind us to stay hydrated.", author: "Unknown" },
+  { date: "Jul-10", quote: "July's tomatoes begin ripening in earnest.", author: "Unknown" },
+  { date: "Jul-11", quote: "July's corn grows tall under the summer sun.", author: "Unknown" },
+  { date: "Jul-12", quote: "July's blueberries are ripe for picking.", author: "Unknown" },
+  { date: "Jul-13", quote: "July's thunderstorms bring relief from the heat.", author: "Unknown" },
+  { date: "Jul-14", quote: "July's Bastille Day is celebrated in France.", author: "Unknown" },
+  { date: "Jul-15", quote: "July's dog days begin as summer reaches its peak.", author: "Unknown" },
+  { date: "Jul-16", quote: "July's heat makes ice cream a daily treat.", author: "Unknown" },
+  { date: "Jul-17", quote: "July's cicadas begin their summer songs.", author: "Unknown" },
+  { date: "Jul-18", quote: "July's melons are sweetest at this time.", author: "Unknown" },
+  { date: "Jul-19", quote: "July's long evenings are perfect for barbecues.", author: "Unknown" },
+  { date: "Jul-20", quote: "July's moon landing anniversary celebrates space exploration.", author: "Unknown" },
+  { date: "Jul-21", quote: "July's heat makes shade a precious commodity.", author: "Unknown" },
+  { date: "Jul-22", quote: "July's peaches reach perfect ripeness.", author: "Unknown" },
+  { date: "Jul-23", quote: "July's fireflies dance in the warm night air.", author: "Unknown" },
+  { date: "Jul-24", quote: "July's Pioneer Day is celebrated in Utah.", author: "Unknown" },
+  { date: "Jul-25", quote: "July's heat makes early mornings the best time to work outside.", author: "Unknown" },
+  { date: "Jul-26", quote: "July's zucchini plants produce more than anyone can use.", author: "Unknown" },
+  { date: "Jul-27", quote: "July's county fairs showcase summer's bounty.", author: "Unknown" },
+  { date: "Jul-28", quote: "July's end approaches, but summer's heat remains.", author: "Unknown" },
+  { date: "Jul-29", quote: "July's final days are often the hottest of the year.", author: "Unknown" },
+  { date: "Jul-30", quote: "July's blackberries begin ripening in the brambles.", author: "Unknown" },
+  { date: "Jul-31", quote: "July departs in a haze of heat and humidity.", author: "Unknown" },
+
+  // August (1-31)
+  { date: "Aug-1", quote: "August is summer's last stand.", author: "Unknown" },
+  { date: "Aug-2", quote: "August's heat is tempered by thoughts of autumn ahead.", author: "Unknown" },
+  { date: "Aug-3", quote: "August's full moon is called the Sturgeon Moon.", author: "Unknown" },
+  { date: "Aug-4", quote: "August's gardens overflow with produce.", author: "Unknown" },
+  { date: "Aug-5", quote: "August's dog days reach their peak.", author: "Unknown" },
+  { date: "Aug-6", quote: "August's heat makes swimming a daily ritual.", author: "Unknown" },
+  { date: "Aug-7", quote: "August's tomatoes are at their most flavorful.", author: "Unknown" },
+  { date: "Aug-8", quote: "August's corn is sweetest at this time.", author: "Unknown" },
+  { date: "Aug-9", quote: "August's melons are perfect for hot summer days.", author: "Unknown" },
+  { date: "Aug-10", quote: "August's peaches are juicy and abundant.", author: "Unknown" },
+  { date: "Aug-11", quote: "August's blackberries ripen in the summer heat.", author: "Unknown" },
+  { date: "Aug-12", quote: "August's meteor showers light up the night sky.", author: "Unknown" },
+  { date: "Aug-13", quote: "August's heat makes shade trees invaluable.", author: "Unknown" },
+  { date: "Aug-14", quote: "August's cicadas sing their summer songs.", author: "Unknown" },
+  { date: "Aug-15", quote: "August's middle marks summer's gradual winding down.", author: "Unknown" },
+  { date: "Aug-16", quote: "August's county fairs showcase summer's end.", author: "Unknown" },
+  { date: "Aug-17", quote: "August's heat makes ice cream a daily necessity.", author: "Unknown" },
+  { date: "Aug-18", quote: "August's zucchini plants continue their relentless production.", author: "Unknown" },
+  { date: "Aug-19", quote: "August's figs begin ripening in warm climates.", author: "Unknown" },
+  { date: "Aug-20", quote: "August's end approaches, bringing thoughts of school.", author: "Unknown" },
+  { date: "Aug-21", quote: "August's heat begins to moderate in northern regions.", author: "Unknown" },
+  { date: "Aug-22", quote: "August's late summer flowers bloom in profusion.", author: "Unknown" },
+  { date: "Aug-23", quote: "August's fireflies begin to dwindle in number.", author: "Unknown" },
+  { date: "Aug-24", quote: "August's peaches give way to early apples.", author: "Unknown" },
+  { date: "Aug-25", quote: "August's heat breaks in occasional thunderstorms.", author: "Unknown" },
+  { date: "Aug-26", quote: "August's tomatoes begin to slow their production.", author: "Unknown" },
+  { date: "Aug-27", quote: "August's final days are bittersweet summer moments.", author: "Unknown" },
+  { date: "Aug-28", quote: "August's end brings the first hints of autumn.", author: "Unknown" },
+  { date: "Aug-29", quote: "August's heat lingers, but nights grow longer.", author: "Unknown" },
+  { date: "Aug-30", quote: "August's final days are summer's last hurrah.", author: "Unknown" },
+  { date: "Aug-31", quote: "August departs, making way for September.", author: "Unknown" },
+
+  // September (1-30)
+  { date: "Sep-1", quote: "September is the month of new beginnings for many.", author: "Unknown" },
+  { date: "Sep-2", quote: "September's Labor Day marks summer's unofficial end.", author: "Unknown" },
+  { date: "Sep-3", quote: "September's days grow noticeably shorter.", author: "Unknown" },
+  { date: "Sep-4", quote: "September's mornings are cooler and fresher.", author: "Unknown" },
+  { date: "Sep-5", quote: "September's full moon is called the Corn Moon.", author: "Unknown" },
+  { date: "Sep-6", quote: "September's gardens yield their final summer bounty.", author: "Unknown" },
+  { date: "Sep-7", quote: "September's apples begin ripening in earnest.", author: "Unknown" },
+  { date: "Sep-8", quote: "September's school buses return to the roads.", author: "Unknown" },
+  { date: "Sep-9", quote: "September's goldenrod blooms along roadsides.", author: "Unknown" },
+  { date: "Sep-10", quote: "September's asters add purple to the landscape.", author: "Unknown" },
+  { date: "Sep-11", quote: "September's Patriot Day reminds us to never forget.", author: "Unknown" },
+  { date: "Sep-12", quote: "September's middle brings the autumnal equinox.", author: "Unknown" },
+  { date: "Sep-13", quote: "September's harvest moon lights the evening sky.", author: "Unknown" },
+  { date: "Sep-14", quote: "September's grapes are ready for picking.", author: "Unknown" },
+  { date: "Sep-15", quote: "September's Hispanic Heritage Month begins.", author: "Unknown" },
+  { date: "Sep-16", quote: "September's Mexico Independence Day is celebrated.", author: "Unknown" },
+  { date: "Sep-17", quote: "September's Constitution Day honors U.S. founding.", author: "Unknown" },
+  { date: "Sep-18", quote: "September's apples are perfect for pie-making.", author: "Unknown" },
+  { date: "Sep-19", quote: "September's Talk Like a Pirate Day brings fun.", author: "Unknown" },
+  { date: "Sep-20", quote: "September's autumnal equinox marks the first day of fall.", author: "Unknown" },
+  { date: "Sep-21", quote: "September's International Day of Peace is observed.", author: "Unknown" },
+  { date: "Sep-22", quote: "September's leaves begin to turn in northern areas.", author: "Unknown" },
+  { date: "Sep-23", quote: "September's pumpkins begin turning orange.", author: "Unknown" },
+  { date: "Sep-24", quote: "September's chrysanthemums come into bloom.", author: "Unknown" },
+  { date: "Sep-25", quote: "September's end approaches, bringing crisp mornings.", author: "Unknown" },
+  { date: "Sep-26", quote: "September's harvest festivals celebrate abundance.", author: "Unknown" },
+  { date: "Sep-27", quote: "September's walnuts begin falling from trees.", author: "Unknown" },
+  { date: "Sep-28", quote: "September's geese begin their southward flights.", author: "Unknown" },
+  { date: "Sep-29", quote: "September's final days are a mix of summer and fall.", author: "Unknown" },
+  { date: "Sep-30", quote: "September departs, making way for October.", author: "Unknown" },
+
+  // October (1-31)
+  { date: "Oct-1", quote: "October is the fallen leaf, but it is also a wider horizon more clearly seen.", author: "Hal Borland" },
+  { date: "Oct-2", quote: "October's colors make the world look like a sunset.", author: "Unknown" },
+  { date: "Oct-3", quote: "October's full moon is called the Hunter's Moon.", author: "Unknown" },
+  { date: "Oct-4", quote: "October's crisp air is invigorating after summer's heat.", author: "Unknown" },
+  { date: "Oct-5", quote: "October's World Teachers' Day honors educators.", author: "Unknown" },
+  { date: "Oct-6", quote: "October's leaves reach their peak color in many areas.", author: "Unknown" },
+  { date: "Oct-7", quote: "October's harvest is in full swing on farms.", author: "Unknown" },
+  { date: "Oct-8", quote: "October's pumpkins are ready for picking.", author: "Unknown" },
+  { date: "Oct-9", quote: "October's Columbus Day is observed in many places.", author: "Unknown" },
+  { date: "Oct-10", quote: "October's World Mental Health Day raises awareness.", author: "Unknown" },
+  { date: "Oct-11", quote: "October's Indigenous Peoples' Day celebrates native cultures.", author: "Unknown" },
+  { date: "Oct-12", quote: "October's middle brings the heart of autumn.", author: "Unknown" },
+  { date: "Oct-13", quote: "October's falling leaves create nature's confetti.", author: "Unknown" },
+  { date: "Oct-14", quote: "October's apple cider is a seasonal delight.", author: "Unknown" },
+  { date: "Oct-15", quote: "October's Breast Cancer Awareness Month begins.", author: "Unknown" },
+  { date: "Oct-16", quote: "October's World Food Day highlights hunger issues.", author: "Unknown" },
+  { date: "Oct-17", quote: "October's crisp nights are perfect for bonfires.", author: "Unknown" },
+  { date: "Oct-18", quote: "October's pumpkin spice flavors dominate menus.", author: "Unknown" },
+  { date: "Oct-19", quote: "October's Halloween preparations begin in earnest.", author: "Unknown" },
+  { date: "Oct-20", quote: "October's trees become a riot of red, orange and gold.", author: "Unknown" },
+  { date: "Oct-21", quote: "October's Apple Day celebrates this versatile fruit.", author: "Unknown" },
+  { date: "Oct-22", quote: "October's United Nations Day marks the organization's founding.", author: "Unknown" },
+  { date: "Oct-23", quote: "October's falling leaves signal nature's preparation for winter.", author: "Unknown" },
+  { date: "Oct-24", quote: "October's pumpkins are carved into jack-o'-lanterns.", author: "Unknown" },
+  { date: "Oct-25", quote: "October's end approaches, bringing colder nights.", author: "Unknown" },
+  { date: "Oct-26", quote: "October's National Pumpkin Day celebrates this iconic squash.", author: "Unknown" },
+  { date: "Oct-27", quote: "October's Halloween excitement builds among children.", author: "Unknown" },
+  { date: "Oct-28", quote: "October's full moon is called the Blood Moon when eclipsed.", author: "Unknown" },
+  { date: "Oct-29", quote: "October's final days are filled with Halloween spirit.", author: "Unknown" },
+  { date: "Oct-30", quote: "October's Mischief Night precedes Halloween in some areas.", author: "Unknown" },
+  { date: "Oct-31", quote: "October's Halloween brings costumes, candy and fun.", author: "Unknown" },
+
+  // November (1-30)
+  { date: "Nov-1", quote: "November is the month of remembrance and gratitude.", author: "Unknown" },
+  { date: "Nov-2", quote: "November's All Souls' Day remembers departed loved ones.", author: "Unknown" },
+  { date: "Nov-3", quote: "November's Election Day in the U.S. occurs this month.", author: "Unknown" },
+  { date: "Nov-4", quote: "November's days grow shorter and colder.", author: "Unknown" },
+  { date: "Nov-5", quote: "November's Guy Fawkes Night is celebrated in Britain.", author: "Unknown" },
+  { date: "Nov-6", quote: "November's full moon is called the Beaver Moon.", author: "Unknown" },
+  { date: "Nov-7", quote: "November's trees stand bare against gray skies.", author: "Unknown" },
+  { date: "Nov-8", quote: "November's Veterans Day honors military service.", author: "Unknown" },
+  { date: "Nov-9", quote: "November's World Freedom Day marks the fall of the Berlin Wall.", author: "Unknown" },
+  { date: "Nov-10", quote: "November's Marine Corps Birthday is celebrated.", author: "Unknown" },
+  { date: "Nov-11", quote: "November's Remembrance Day honors war dead in Commonwealth nations.", author: "Unknown" },
+  { date: "Nov-12", quote: "November's middle brings the first snows to many areas.", author: "Unknown" },
+  { date: "Nov-13", quote: "November's World Kindness Day encourages goodwill.", author: "Unknown" },
+  { date: "Nov-14", quote: "November's Thanksgiving preparations begin in the U.S.", author: "Unknown" },
+  { date: "Nov-15", quote: "November's America Recycles Day promotes sustainability.", author: "Unknown" },
+  { date: "Nov-16", quote: "November's International Tolerance Day fosters understanding.", author: "Unknown" },
+  { date: "Nov-17", quote: "November's cranberries are harvested for Thanksgiving.", author: "Unknown" },
+  { date: "Nov-18", quote: "November's cold winds strip the last leaves from trees.", author: "Unknown" },
+  { date: "Nov-19", quote: "November's World Toilet Day highlights sanitation issues.", author: "Unknown" },
+  { date: "Nov-20", quote: "November's Universal Children's Day promotes kids' welfare.", author: "Unknown" },
+  { date: "Nov-21", quote: "November's end approaches, bringing winter nearer.", author: "Unknown" },
+  { date: "Nov-22", quote: "November's Thanksgiving in the U.S. is a time for family.", author: "Unknown" },
+  { date: "Nov-23", quote: "November's Black Friday kicks off holiday shopping.", author: "Unknown" },
+  { date: "Nov-24", quote: "November's Small Business Saturday supports local shops.", author: "Unknown" },
+  { date: "Nov-25", quote: "November's Cyber Monday moves shopping online.", author: "Unknown" },
+  { date: "Nov-26", quote: "November's Giving Tuesday encourages charitable donations.", author: "Unknown" },
+  { date: "Nov-27", quote: "November's final days blend into the holiday season.", author: "Unknown" },
+  { date: "Nov-28", quote: "November's Hanukkah sometimes begins this month.", author: "Unknown" },
+  { date: "Nov-29", quote: "November's cold nights make warm blankets welcome.", author: "Unknown" },
+  { date: "Nov-30", quote: "November departs, making way for December.", author: "Unknown" },
+
+  // December (1-31)
+  { date: "Dec-1", quote: "December is the month of lights, love and celebration.", author: "Unknown" },
+  { date: "Dec-2", quote: "December's World Pollution Prevention Day raises awareness.", author: "Unknown" },
+  { date: "Dec-3", quote: "December's International Day of Persons with Disabilities promotes inclusion.", author: "Unknown" },
+  { date: "Dec-4", quote: "December's holiday decorations brighten the winter darkness.", author: "Unknown" },
+  { date: "Dec-5", quote: "December's Krampusnacht precedes St. Nicholas Day in some cultures.", author: "Unknown" },
+  { date: "Dec-6", quote: "December's St. Nicholas Day brings small gifts in some countries.", author: "Unknown" },
+  { date: "Dec-7", quote: "December's Pearl Harbor Remembrance Day honors WWII sacrifices.", author: "Unknown" },
+  { date: "Dec-8", quote: "December's full moon is called the Cold Moon.", author: "Unknown" },
+  { date: "Dec-9", quote: "December's holiday shopping reaches its peak.", author: "Unknown" },
+  { date: "Dec-10", quote: "December's Human Rights Day promotes universal freedoms.", author: "Unknown" },
+  { date: "Dec-11", quote: "December's International Mountain Day celebrates highlands.", author: "Unknown" },
+  { date: "Dec-12", quote: "December's middle brings the winter solstice in the north.", author: "Unknown" },
+  { date: "Dec-13", quote: "December's St. Lucia's Day brings light in Scandinavian countries.", author: "Unknown" },
+  { date: "Dec-14", quote: "December's National Cocoa Day celebrates this winter drink.", author: "Unknown" },
+  { date: "Dec-15", quote: "December's holiday parties bring friends together.", author: "Unknown" },
+  { date: "Dec-16", quote: "December's Las Posadas begins in Mexican tradition.", author: "Unknown" },
+  { date: "Dec-17", quote: "December's Wright Brothers Day honors aviation pioneers.", author: "Unknown" },
+  { date: "Dec-18", quote: "December's International Migrants Day highlights global movement.", author: "Unknown" },
+  { date: "Dec-19", quote: "December's final holiday preparations are underway.", author: "Unknown" },
+  { date: "Dec-20", quote: "December's winter solstice marks the shortest day of the year.", author: "Unknown" },
+  { date: "Dec-21", quote: "December's Yule celebrations honor the returning sun.", author: "Unknown" },
+  { date: "Dec-22", quote: "December's days begin growing longer after the solstice.", author: "Unknown" },
+  { date: "Dec-23", quote: "December's Festivus offers a humorous holiday alternative.", author: "Unknown" },
+  { date: "Dec-24", quote: "December's Christmas Eve brings anticipation and joy.", author: "Unknown" },
+  { date: "Dec-25", quote: "December's Christmas Day is celebrated worldwide.", author: "Unknown" },
+  { date: "Dec-26", quote: "December's Boxing Day is observed in Commonwealth nations.", author: "Unknown" },
+  { date: "Dec-27", quote: "December's Kwanzaa begins, celebrating African heritage.", author: "Unknown" },
+  { date: "Dec-28", quote: "December's final days are a time for reflection.", author: "Unknown" },
+      { date: "Dec-31", quote: "All power is within you; you can do anything and everything.", author: "Swami Vivekananda" }
+    ];
+
+    function formatDate(date) {
+      const options = { month: 'short', day: 'numeric' };
+      return new Intl.DateTimeFormat('en-US', options).format(date).replace(',', '').replace(' ', '-');
+    }
+
+    function getQuoteByDate(date) {
+      return yearlyQuotes.find(item => item.date === date) || 
+             { date: date, quote: "No quote found for this date.", author: "Unknown" };
+    }
+
+    function displayQuote(quoteObj) {
+      document.getElementById("quote").textContent = `"${quoteObj.quote}"`;
+      document.getElementById("author").textContent = `- ${quoteObj.author}`;
+      document.getElementById("date").textContent = `Date: ${quoteObj.date}`;
+    }
+
+    function displayTodaysQuote() {
+      const today = new Date();
+      const formattedDate = formatDate(today); // e.g., Jan-3
+      const todayQuote = getQuoteByDate(formattedDate);
+      displayQuote(todayQuote);
+    }
+
+    function generateQuote() {
+      const randomIndex = Math.floor(Math.random() * yearlyQuotes.length);
+      const randomQuote = yearlyQuotes[randomIndex];
+      displayQuote(randomQuote);
+    }
+
+    // Show today's quote on page load
+    displayTodaysQuote();
+  </script>
+</body>
+</html>
