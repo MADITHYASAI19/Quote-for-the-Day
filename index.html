@@ -14,19 +14,18 @@
 
     body {
       font-family: Arial, sans-serif;
-      background-color: #121212; /* Dark background for the body */
-      color: #eee; /* Light text color */
+      background-color: #121212;
+      color: #eee;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
-      margin: 0;
       transition: background-color 0.3s ease, color 0.3s ease;
     }
 
     /* Container Styles */
     .container {
-      background: #fff; /* White background for the container */
+      background: #fff;
       padding: 30px;
       border-radius: 12px;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
@@ -39,13 +38,21 @@
     .quote {
       font-size: 1.4rem;
       margin-bottom: 20px;
-      color: #333; /* Dark color for the quote */
+      color: #333;
       transition: color 0.3s ease;
     }
 
     .author {
       font-size: 1.1rem;
-      color: #555; /* Lighter color for the author */
+      color: #555;
+      margin-bottom: 30px;
+      transition: color 0.3s ease;
+    }
+
+    /* Date Styling */
+    .date {
+      font-size: 0.95rem;
+      color: #777;
       margin-bottom: 30px;
       transition: color 0.3s ease;
     }
@@ -67,14 +74,12 @@
       transform: scale(1.05);
     }
 
-    /* Date Styling */
-    .date {
-      font-size: 0.95rem;
-      color: #777; /* Lighter color for the date */
-      margin-bottom: 30px;
-      transition: color 0.3s ease;
+    /* Creator Info */
+    .creator {
+      margin-top: 25px;
+      font-size: 0.85rem;
+      color: #888;
     }
-
   </style>
 </head>
 <body>
@@ -83,6 +88,7 @@
     <div class="author" id="author">-</div>
     <div class="date" id="date">Date: -</div>
     <button onclick="generateQuote()">New Quote</button>
+    <div class="creator">Created by M Adithyasai</div>
   </div>
 
   <script>
@@ -95,7 +101,7 @@
       { date: "Jan-6", quote: "The greatest sin is to think yourself weak.", author: "Swami Vivekananda" },
       { date: "Jan-7", quote: "The world is the great gymnasium where we come to make ourselves strong.", author: "Swami Vivekananda" },
       { date: "Jan-8", quote: "Act as if what you do makes a difference. It does.", author: "William James" },
-  { date: "Jan-9", quote: "What you do today can improve all your tomorrows.", author: "Ralph Marston" },
+      { date: "Jan-9", quote: "What you do today can improve all your tomorrows.", author: "Ralph Marston" },
   { date: "Jan-10", quote: "The only limit to our realization of tomorrow is our doubts of today.", author: "Franklin D. Roosevelt" },
   { date: "Jan-11", quote: "You are never too old to set another goal or to dream a new dream.", author: "C.S. Lewis" },
   { date: "Jan-12", quote: "The future belongs to those who believe in the beauty of their dreams.", author: "Eleanor Roosevelt" },
